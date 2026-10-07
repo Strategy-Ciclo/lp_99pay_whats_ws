@@ -1,0 +1,405 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <title>Web Stories - 99Pay</title>
+    
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;800;900&display=swap');
+
+        :root {
+            --99-yellow: #FFD100;
+            --99-orange: #FF6200;
+            --99-black: #000000;
+            --99-white: #FFFFFF;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #1a1a1a;
+            margin: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            height: -webkit-fill-available; 
+            height: 100dvh;
+            overflow: hidden;
+        }
+
+        /* Força a compatibilidade do desfoque no iOS WebKit */
+        .backdrop-blur-md, .backdrop-blur-sm {
+            -webkit-backdrop-filter: blur(8px) !important;
+            backdrop-filter: blur(8px) !important;
+        }
+
+        .story-container {
+            width: 100%;
+            max-width: 400px;
+            height: 100%;
+            max-height: 800px;
+            position: relative;
+            background-color: var(--99-black);
+            overflow: hidden;
+            box-shadow: 0 0 20px rgba(0,0,0,0.5);
+        }
+
+        @media (min-width: 450px) {
+            .story-container {
+                height: 90vh;
+                border-radius: 16px;
+            }
+        }
+
+        .progress-container {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            right: 10px;
+            display: flex;
+            gap: 5px;
+            z-index: 50;
+        }
+
+        .progress-bar {
+            flex: 1;
+            height: 4px;
+            background-color: rgba(255, 255, 255, 0.3);
+            border-radius: 2px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            width: 0%;
+            background-color: var(--99-yellow);
+            transform-origin: left;
+        }
+
+        /* ÁREAS DE TOQUE */
+        .touch-left, .touch-right {
+            position: absolute;
+            top: 0;
+            height: 100%;
+            z-index: 10;
+            cursor: pointer;
+            -webkit-tap-highlight-color: transparent;
+        }
+        .touch-left { width: 33.33%; left: 0; }
+        .touch-right { width: 66.67%; right: 0; }
+
+        /* CAMADAS DO STORY */
+        .story-slide {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            opacity: 0;
+            z-index: 20;
+            pointer-events: none;
+            transition: opacity 0.3s ease;
+        }
+
+        .story-slide.active {
+            opacity: 1;
+        }
+
+        .bg-image {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            z-index: 1;
+        }
+
+        .bg-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 2;
+        }
+
+        .story-content {
+            position: relative;
+            z-index: 3;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* ANIMAÇÃO DOS BOTÕES */
+        @-webkit-keyframes pulse {
+            0% { -webkit-transform: scale(1); transform: scale(1); }
+            50% { -webkit-transform: scale(1.05); transform: scale(1.05); }
+            100% { -webkit-transform: scale(1); transform: scale(1); }
+        }
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+        
+        .cta-button {
+            -webkit-animation: pulse 2s infinite;
+            animation: pulse 2s infinite;
+        }
+
+        .interactive-btn {
+            pointer-events: auto;
+            position: relative;
+            z-index: 50; 
+        }
+    </style>
+</head>
+<body>
+
+    <div class="story-container">
+        
+        <!-- Barras de Progresso -->
+        <div class="progress-container">
+            <div class="progress-bar"><div class="progress-fill" id="fill-0"></div></div>
+            <div class="progress-bar"><div class="progress-fill" id="fill-1"></div></div>
+            <div class="progress-bar"><div class="progress-fill" id="fill-2"></div></div>
+        </div>
+
+        <!-- Áreas de toque de navegação -->
+        <div class="touch-left" onclick="prevStory()"></div>
+        <div class="touch-right" onclick="nextStory()"></div>
+
+        <!-- STORY 1: À Vista (Design Dinâmico Neo-Brutalista) -->
+        <div class="story-slide active" id="story-0">
+            <img src="https://gsvc.pgmais.com.br/comercial/RCS/99PAY/img_sem_sexto/bg_amarelo99.jpg" alt="Vantagem" class="bg-image">
+            
+            <div class="bg-overlay" style="background: linear-gradient(to bottom, rgba(0,0,0,0.1) 0%, rgba(0,0,0,0.4) 100%);"></div>
+            
+            <div class="story-content pt-16 pb-6 px-6">
+                
+                <div class="shrink-0 text-black relative z-20">
+                    <span class="font-bold text-2xl tracking-tighter mb-2 block drop-shadow-sm">99<span class="font-normal">Pay</span></span>
+                </div>
+                
+                <div class="flex-1 flex flex-col justify-center items-center w-full relative z-20">
+                    <div class="relative w-full max-w-[280px] mx-auto mt-2 mb-8">
+                        <div class="absolute inset-0 bg-black transform -skew-y-6 translate-y-3 translate-x-3 shadow-2xl"></div>
+                        <div class="absolute inset-0 bg-[#FF6200] transform -skew-y-6 translate-y-1.5 translate-x-1.5"></div>
+                        
+                        <div class="relative bg-yellow-400 transform -skew-y-6 p-4 flex flex-col items-center shadow-lg">
+                            <div class="transform skew-y-6 text-center w-full">
+                                <p class="text-black font-black uppercase tracking-widest text-xs mb-2 border-b-[3px] border-black inline-block pb-1">
+                                    Pagamento à vista
+                                </p>
+                                <p class="text-black font-extrabold text-xl leading-none mt-1">Você ganha até</p>
+                                <h2 class="text-black font-black tracking-tighter flex flex-col items-center my-1">
+                                    <span class="text-[5rem] leading-[0.8] -mb-1">100%</span>
+                                    <span class="text-[3.8rem] leading-[0.8]">OFF</span>
+                                </h2>
+                            </div>
+                        </div>
+                        
+                        <div class="absolute -bottom-6 left-1/2 transform -translate-x-1/2 rotate-3 z-30 w-[115%] text-center">
+                            <div class="inline-block bg-black text-yellow-400 font-black text-3xl tracking-tight px-6 py-2 uppercase border-4 border-yellow-400 shadow-[4px_4px_0px_#000000]">
+                                Nos Juros
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="mt-4 bg-black/60 backdrop-blur-sm p-4 border-l-4 border-yellow-400 w-full max-w-[320px]">
+                        <p class="text-white text-sm font-medium leading-snug drop-shadow-md">
+                            É jogo rápido: gerou o código, você tem 24h para pagar e resolver sua vida sem complicação.
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Rodapé Flexível com 3 Botões (Invertidos) -->
+                <div class="shrink-0 w-full flex flex-col justify-end gap-3 relative z-50 pt-2">
+                    <a href="https://wa.me/5541988242195?text=Ol%C3%A1%2C%20quero%20saber%20mais%20sobre%20meu%20contrato%21" target="_blank" class="interactive-btn cta-button inline-block bg-black text-white font-extrabold text-lg py-3 px-8 rounded-full shadow-2xl w-full text-center hover:bg-gray-800 transition-colors">
+                        WhatsApp
+                    </a>
+                    
+                    <a href="https://oia.99app.com/99/WIBgTdr" target="_blank" class="interactive-btn cta-button inline-block bg-black text-white font-extrabold text-lg py-3 px-8 rounded-full shadow-2xl w-full text-center hover:bg-gray-800 transition-colors">
+                        Acesse o app
+                    </a>
+                    
+                    <!-- Botão alterado para amarelo -->
+                    <a href="tel:40044885" class="interactive-btn inline-block bg-transparent border-2 border-yellow-400 text-yellow-400 font-bold text-base py-2.5 px-8 rounded-full w-full text-center hover:bg-yellow-400 hover:text-black transition-colors">
+                        Central de Atendimento
+                    </a>
+                </div>
+                
+            </div>
+        </div>
+
+        <!-- STORY 2: Reparcelamento -->
+        <div class="story-slide" id="story-1">
+            <img src="https://gsvc.pgmais.com.br/comercial/RCS/99PAY/img_sem_sexto/99_tranquilidade_sem_logo.png" alt="Tranquilidade" class="bg-image" style="-webkit-transform: scale(1.15) translateY(-6%); transform: scale(1.15) translateY(-6%);">
+            
+            <div class="bg-overlay" style="background: linear-gradient(to bottom, rgba(0,0,0,0.05) 0%, rgba(0,0,0,0.3) 40%, rgba(0,0,0,0.85) 100%);"></div>
+            
+            <div class="story-content pt-16 pb-6 px-6">
+                
+                <div class="shrink-0">
+                    <h1 class="text-4xl font-extrabold text-white tracking-tight leading-none drop-shadow-lg">
+                        Retome o<br>controle do<br><span class="text-yellow-400">seu dinheiro.</span>
+                    </h1>
+                </div>
+                
+                <div class="flex-1 flex flex-col justify-end pb-4 pt-4 w-full relative z-20">
+                    <div class="bg-black/30 backdrop-blur-sm border-l-4 border-yellow-400 rounded-2xl p-5 shadow-2xl">
+                        <p class="text-xl font-bold text-white mb-2 drop-shadow-md">Parcele em até 18x e respire aliviado.</p>
+                        
+                        <p class="text-sm text-gray-100 mb-4 drop-shadow-md">Assegure condições mais vantajosas com a redução dos juros originais do seu contrato.</p>
+                        
+                        <p class="text-base text-white font-semibold mb-4 flex items-center gap-2 drop-shadow-md">
+                            <span class="text-yellow-400 text-2xl">⏳</span> Até 30 dias para começar a pagar.
+                        </p>
+                        
+                        <div class="bg-yellow-400/95 text-black font-bold p-3 rounded-xl text-sm leading-tight text-center shadow-lg">
+                            Assine seu acordo no app até as 23h59 e garanta essa condição.
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Rodapé Flexível com 3 Botões (Invertidos) -->
+                <div class="shrink-0 w-full flex flex-col justify-end gap-3 pt-2">
+                    <a href="https://wa.me/5541988242195?text=Ol%C3%A1%2C%20quero%20saber%20mais%20sobre%20meu%20contrato%21" target="_blank" class="interactive-btn cta-button inline-block bg-yellow-400 text-black font-extrabold text-lg py-3 px-8 rounded-full shadow-xl w-full text-center hover:bg-yellow-500 transition-colors">
+                        WhatsApp
+                    </a>
+
+                    <a href="https://oia.99app.com/99/WIBgTdr" target="_blank" class="interactive-btn cta-button inline-block bg-yellow-400 text-black font-extrabold text-lg py-3 px-8 rounded-full shadow-xl w-full text-center hover:bg-yellow-500 transition-colors">
+                        Acesse o app
+                    </a>
+
+                    <a href="tel:40044885" class="interactive-btn inline-block bg-transparent border-2 border-yellow-400 text-yellow-400 font-bold text-base py-2.5 px-8 rounded-full w-full text-center hover:bg-yellow-400 hover:text-black transition-colors">
+                        Central de Atendimento
+                    </a>
+                </div>
+                
+            </div>
+        </div>
+
+        <!-- STORY 3: CTA Final e Contato -->
+        <div class="story-slide" id="story-2">
+            <img src="https://gsvc.pgmais.com.br/comercial/RCS/99PAY/img_sem_sexto/boas_vindas_99.jpg" alt="Segurança" class="bg-image">
+            
+            <div class="bg-overlay" style="background: linear-gradient(to bottom, rgba(255,209,0,0.6), rgba(255,209,0,0.9));"></div>
+            
+            <div class="story-content pt-16 pb-8 px-6">
+                
+                <div class="shrink-0 text-black drop-shadow-sm">
+                    <span class="font-bold text-3xl tracking-tighter leading-none block">99<span class="font-normal">Pay</span></span>
+                    <span class="text-sm font-bold mt-1 block">a conta digital da 99</span>
+                </div>
+                
+                <div class="flex-1 flex flex-col justify-center py-6 text-black drop-shadow-sm">
+                    <h1 class="text-4xl font-extrabold tracking-tight leading-tight mb-6">
+                        Sua tranquilidade a um toque de distância.
+                    </h1>
+                    <p class="text-lg font-medium pr-4">
+                        Toda a negociação acontece direto no seu celular, com a segurança e a praticidade que você já conhece. Sem letras miúdas.
+                    </p>
+                </div>
+                
+                <!-- Rodapé Flexível com 3 Botões (Invertidos) -->
+                <div class="shrink-0 w-full flex flex-col justify-end gap-3 pt-2">
+                    <a href="https://wa.me/5541988242195?text=Ol%C3%A1%2C%20quero%20saber%20mais%20sobre%20meu%20contrato%21" target="_blank" class="interactive-btn cta-button inline-block bg-black text-white font-bold text-lg py-3 px-8 rounded-full shadow-2xl w-full text-center hover:bg-gray-800 transition-colors">
+                        WhatsApp
+                    </a>
+
+                    <a href="https://oia.99app.com/99/WIBgTdr" target="_blank" class="interactive-btn cta-button inline-block bg-black text-white font-bold text-lg py-3 px-8 rounded-full shadow-2xl w-full text-center hover:bg-gray-800 transition-colors">
+                        Acesse o app
+                    </a>
+
+                    <a href="tel:40044885" class="interactive-btn inline-block bg-transparent border-2 border-black text-black font-bold text-base py-2.5 px-8 rounded-full w-full text-center hover:bg-black hover:text-white transition-colors">
+                        Central de Atendimento
+                    </a>
+                </div>
+                
+            </div>
+        </div>
+
+    </div>
+
+    <script>
+        const totalStories = 3;
+        let currentStory = 0;
+        const storyDuration = 40000;
+        let startTime = null;
+        let animationFrameId;
+
+        function updateUI() {
+            for(let i = 0; i < totalStories; i++) {
+                const slide = document.getElementById(`story-${i}`);
+                if(i === currentStory) {
+                    slide.classList.add('active');
+                } else {
+                    slide.classList.remove('active');
+                }
+            }
+
+            for(let i = 0; i < currentStory; i++) {
+                document.getElementById(`fill-${i}`).style.width = '100%';
+            }
+            for(let i = currentStory + 1; i < totalStories; i++) {
+                document.getElementById(`fill-${i}`).style.width = '0%';
+            }
+        }
+
+        function animate(timestamp) {
+            if (!startTime) startTime = timestamp;
+            const elapsed = timestamp - startTime;
+            const progress = Math.min((elapsed / storyDuration) * 100, 100);
+
+            document.getElementById(`fill-${currentStory}`).style.width = `${progress}%`;
+
+            if (elapsed < storyDuration) {
+                animationFrameId = requestAnimationFrame(animate);
+            } else {
+                nextStory();
+            }
+        }
+
+        function resetTimer() {
+            cancelAnimationFrame(animationFrameId);
+            startTime = null;
+            updateUI();
+            animationFrameId = requestAnimationFrame(animate);
+        }
+
+        function nextStory() {
+            if (currentStory < totalStories - 1) {
+                currentStory++;
+                resetTimer();
+            } else {
+                document.getElementById(`fill-${currentStory}`).style.width = '100%';
+                cancelAnimationFrame(animationFrameId);
+            }
+        }
+
+        function prevStory() {
+            if (currentStory > 0) {
+                currentStory--;
+                resetTimer();
+            } else {
+                resetTimer();
+            }
+        }
+
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'ArrowRight') nextStory();
+            if (e.key === 'ArrowLeft') prevStory();
+        });
+
+        resetTimer();
+    </script>
+</body>
+</html>
